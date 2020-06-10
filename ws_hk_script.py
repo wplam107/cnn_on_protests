@@ -3,14 +3,14 @@ import pandas as pd
 from selenium import webdriver
 from webscrape_funcs import get_urls, scrape_site
 
+# Rescrape HK protest articles from CNN
 if __name__ == '__main__':
-    driver = webdriver.Chrome()
-    args = {'query': 'protests', 'category': 'us', 'limit': 20}
-    urls = get_urls(driver, args)
-    driver.quit()
+    f = open('cnn_urls.p', 'rb')
+    hk_urls = pickle.load(f)
+    f.close()
 
     driver = webdriver.Chrome()
-    scraped_urls, dates, headlines, bodies = scrape_site(urls, driver)
+    scraped_urls, dates, headlines, bodies = scrape_site(hk_urls, driver)
     df = pd.DataFrame()
     df['headline'] = headlines
     df['body'] = bodies
@@ -18,6 +18,6 @@ if __name__ == '__main__':
     df['url'] = scraped_urls
     driver.quit()
 
-    f = open('us_protests.p', 'wb')
+    f = open('hk_protests.p', 'wb')
     pickle.dump(df, f)
     f.close()
